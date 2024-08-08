@@ -1,6 +1,7 @@
 package com.masprogtech.services.product;
 
 import com.masprogtech.entities.Product;
+import com.masprogtech.repositories.ProductRepository;
 
 import java.util.List;
 
