@@ -1,29 +1,43 @@
 package com.masprogtech.services.product;
 
 import com.masprogtech.entities.Product;
+import com.masprogtech.exception.ProductNotFoundException;
 import com.masprogtech.repositories.ProductRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductService implements IProductService {
+
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     @Override
     public Product addProduct(Product product) {
-        return null;
+      return null;
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return null;
+
+        return productRepository.findAll();
     }
 
     @Override
     public Product getProductById(Long id) {
-        return null;
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found!"));
     }
 
     @Override
     public void deleteProductByID(Long id) {
-
+       productRepository.findById(id)
+               .ifPresentOrElse(productRepository::delete,
+                       () -> {throw new ProductNotFoundException("Product not found!");});
     }
 
     @Override
@@ -32,28 +46,28 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductsByCategoryId(Long categoryId) {
-        return null;
+    public List<Product> getProductsByCategory(String category) {
+       return productRepository.findByCategoryName(category);
     }
 
     @Override
     public List<Product> getProductsByBrand(String brand) {
-        return null;
+        return productRepository.findByBrand(brand);
     }
 
     @Override
     public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return null;
+        return productRepository.findByCategoryNameAndBrand(category, brand);
     }
 
     @Override
     public List<Product> getProductsByName(String name) {
-        return null;
+        return productRepository.findByName(name);
     }
 
     @Override
-    public List<Product> getProductsByBrandAndName(String category, String name) {
-        return null;
+    public List<Product> getProductsByBrandAndName(String brand, String name) {
+        return productRepository.findByBrandAndName(brand, name);
     }
 
     @Override
