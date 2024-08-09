@@ -1,12 +1,13 @@
 package com.masprogtech.services.product;
 
 import com.masprogtech.entities.Product;
+import com.masprogtech.request.AddProductRequest;
 
 import java.util.List;
 
 public interface IProductService {
 
-    Product addProduct(Product product);
+    Product addProduct(AddProductRequest product);
     List<Product> getAllProducts();
     Product getProductById(Long id);
     void deleteProductByID(Long id);
