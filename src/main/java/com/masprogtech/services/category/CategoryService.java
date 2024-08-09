@@ -1,11 +1,13 @@
 package com.masprogtech.services.category;
 
 import com.masprogtech.entities.Category;
+import com.masprogtech.exception.AlreadyExistsException;
 import com.masprogtech.exception.ResourceNotFoundException;
 import com.masprogtech.repositories.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryService implements ICategoryService {
@@ -34,12 +36,18 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category addCategory(Category category) {
-        return null;
+        return Optional.of(category).filter(c-> !categoryRepository.existsByName(c.getName()))
+                .map(categoryRepository :: save)
+                .orElseThrow(() -> new AlreadyExistsException(category.getName()+" already exists!"));
     }
 
     @Override
     public Category updateCategory(Category category, Long id) {
-        return null;
+        return Optional.ofNullable(getCategoryById(id))
+                .map(oldCategory -> {
+                    oldCategory.setName(category.getName());
+                    return categoryRepository.save(oldCategory);
+                }).orElseThrow(() -> new ResourceNotFoundException("Category not found!"));
     }
 
     @Override
