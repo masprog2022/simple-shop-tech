@@ -1,2 +1,4 @@
-package com.masprogtech.controllers;public class ProductController {
+package com.masprogtech.controllers;
+
+public class ProductController {
 }
