@@ -1,2 +1,4 @@
-package com.masprogtech.controllers;public class CategoryController {
+package com.masprogtech.controllers;
+
+public class CategoryController {
 }
