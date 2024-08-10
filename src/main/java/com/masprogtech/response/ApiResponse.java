@@ -1,2 +1,11 @@
-package com.masprogtech.response;public class ApiResponse {
+package com.masprogtech.response;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+@AllArgsConstructor
+@Data
+public class ApiResponse {
+    private String message;
+    private Object data;
 }
