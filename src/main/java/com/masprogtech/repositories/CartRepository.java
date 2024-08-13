@@ -1,2 +1,7 @@
-package com.masprogtech.repositories;public class CartRepository {
+package com.masprogtech.repositories;
+
+import com.masprogtech.entities.Cart;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CartRepository extends JpaRepository<Cart, Long> {
 }
