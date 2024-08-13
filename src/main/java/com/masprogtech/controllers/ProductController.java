@@ -1,5 +1,6 @@
 package com.masprogtech.controllers;
 
+import com.masprogtech.dtos.ProductDto;
 import com.masprogtech.entities.Product;
 import com.masprogtech.exception.ResourceNotFoundException;
 import com.masprogtech.request.AddProductRequest;
@@ -26,8 +27,8 @@ public class ProductController {
 
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProducts() {
-        List<Product> products = productService.getAllProducts();
-        //List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+        //List<Product> products = productService.getAllProducts();
+        List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
         return ResponseEntity.ok(new ApiResponse("success", products));
     }
 
