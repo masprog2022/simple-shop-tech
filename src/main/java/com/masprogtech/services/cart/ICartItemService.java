@@ -1,2 +1,4 @@
-package com.masprogtech.services.cart;public class ICartItemService {
+package com.masprogtech.services.cart;
+
+public interface ICartItemService {
 }
