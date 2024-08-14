@@ -3,6 +3,7 @@ package com.masprogtech.services.cart;
 import com.masprogtech.entities.Cart;
 import com.masprogtech.entities.CartItem;
 import com.masprogtech.entities.Product;
+import com.masprogtech.exception.ResourceNotFoundException;
 import com.masprogtech.repositories.CartItemRepository;
 import com.masprogtech.repositories.CartRepository;
 import com.masprogtech.services.product.IProductService;
@@ -13,6 +14,7 @@ public class CartItemService implements ICartItemService {
     private final IProductService productService;
     private final CartRepository cartRepository;
     private final ICartService cartService;
+
     public CartItemService(CartItemRepository cartItemRepository, IProductService productService, CartRepository cartRepository, ICartService cartService) {
         this.cartItemRepository = cartItemRepository;
         this.productService = productService;
@@ -40,8 +42,7 @@ public class CartItemService implements ICartItemService {
             cartItem.setProduct(product);
             cartItem.setQuantity(quantity);
             cartItem.setUnitPrice(product.getPrice());
-        }
-        else {
+        } else {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
         cartItem.setTotalPrice();
@@ -53,7 +54,13 @@ public class CartItemService implements ICartItemService {
 
     @Override
     public void removeItemFromCart(Long cartId, Long productId) {
-
+        Cart cart = cartService.getCart(cartId);
+        CartItem itemToRemove = cart.getItems()
+                .stream()
+                .filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+        cart.removeItem(itemToRemove);
+        cartRepository.save(cart);
     }
 
     @Override
@@ -61,8 +68,5 @@ public class CartItemService implements ICartItemService {
 
     }
 
-    @Override
-    public CartItem getCartItem(Long cartId, Long productId) {
-        return null;
-    }
+
 }
