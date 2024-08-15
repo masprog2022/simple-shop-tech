@@ -1,5 +1,6 @@
 package com.masprogtech.services.order;
 
+import com.masprogtech.dtos.OrderDto;
 import com.masprogtech.entities.Cart;
 import com.masprogtech.entities.Order;
 import com.masprogtech.entities.OrderItem;
@@ -79,14 +80,18 @@ public class OrderService implements IOrderService {
 
 
     @Override
-    public Order getOrder(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(
-                () -> new ResourceNotFoundException("Order not found!"));
+    public OrderDto getOrder(Long orderId) {
+        return orderRepository.findById(orderId)
+                .map(this::convertToDto)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
     @Override
-    public List<Order> getUserOrders(Long userId){
-        return orderRepository.findByUserId(userId);
+    public List<OrderDto> getUserOrders(Long userId){
+        List<Order> orders = orderRepository.findByUserId(userId);
+        return orders.stream().map(this::convertToDto).toList();
     }
 
-
+    private OrderDto convertToDto(Order order) {
+        return modelMapper.map(order, OrderDto.class);
+    }
 }

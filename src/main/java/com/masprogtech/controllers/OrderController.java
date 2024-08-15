@@ -1,5 +1,6 @@
 package com.masprogtech.controllers;
 
+import com.masprogtech.dtos.OrderDto;
 import com.masprogtech.entities.Order;
 import com.masprogtech.exception.ResourceNotFoundException;
 import com.masprogtech.response.ApiResponse;
@@ -37,7 +38,7 @@ public class OrderController {
     @GetMapping("/{orderId}/order")
     public ResponseEntity<ApiResponse> getOrderById(@PathVariable Long orderId) {
         try {
-            Order order = orderService.getOrder(orderId);
+            OrderDto order = orderService.getOrder(orderId);
             return ResponseEntity.ok(new ApiResponse("Item Order Success!", order));
         } catch (ResourceNotFoundException e) {
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Oops!", e.getMessage()));
@@ -48,7 +49,7 @@ public class OrderController {
     @GetMapping("/{userId}/order")
     public ResponseEntity<ApiResponse> getUserOrders(@PathVariable Long userId) {
         try {
-            List<Order> order = orderService.getUserOrders(userId);
+            List<OrderDto> order = orderService.getUserOrders(userId);
             return ResponseEntity.ok(new ApiResponse("Item Order Success!", order));
         } catch (ResourceNotFoundException e) {
             return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse("Oops!", e.getMessage()));
