@@ -1,2 +1,11 @@
-package com.masprogtech.request;public class CreateUserRequest {
+package com.masprogtech.request;
+
+import lombok.Data;
+
+@Data
+public class CreateUserRequest {
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String password;
 }
