@@ -1,11 +1,13 @@
 package com.masprogtech.services.user;
 
+import com.masprogtech.dtos.UserDto;
 import com.masprogtech.entities.User;
 import com.masprogtech.exception.AlreadyExistsException;
 import com.masprogtech.exception.ResourceNotFoundException;
 import com.masprogtech.repositories.UserRepository;
 import com.masprogtech.request.CreateUserRequest;
 import com.masprogtech.request.UserUpdateRequest;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -14,9 +16,11 @@ import java.util.Optional;
 public class UserService implements IUserService{
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, ModelMapper modelMapper) {
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -53,5 +57,10 @@ public class UserService implements IUserService{
         userRepository.findById(userId).ifPresentOrElse(userRepository::delete, () ->{
             throw new ResourceNotFoundException("User not found!");
         });
+    }
+
+    @Override
+    public UserDto convertUserToDto(User user) {
+        return modelMapper.map(user, UserDto.class);
     }
 }
