@@ -1,6 +1,7 @@
 package com.masprogtech.services.cart;
 
 import com.masprogtech.entities.Cart;
+import com.masprogtech.entities.User;
 
 import java.math.BigDecimal;
 
@@ -10,7 +11,7 @@ public interface ICartService {
     void clearCart(Long id);
     BigDecimal getTotalPrice(Long id);
 
-    Long initializeNewCart();
+    Cart initializeNewCart(User user);
 
     Cart getCartByUserId(Long userId);
 }
