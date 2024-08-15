@@ -7,9 +7,11 @@ import com.masprogtech.exception.ResourceNotFoundException;
 import com.masprogtech.repositories.CartItemRepository;
 import com.masprogtech.repositories.CartRepository;
 import com.masprogtech.services.product.IProductService;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
+@Service
 public class CartItemService implements ICartItemService {
 
     private final CartItemRepository cartItemRepository;
