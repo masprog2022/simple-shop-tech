@@ -2,6 +2,7 @@ package com.masprogtech.controllers;
 
 import com.masprogtech.dtos.ProductDto;
 import com.masprogtech.entities.Product;
+import com.masprogtech.exception.AlreadyExistsException;
 import com.masprogtech.exception.ResourceNotFoundException;
 import com.masprogtech.request.AddProductRequest;
 import com.masprogtech.request.ProductUpdateRequest;
@@ -12,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("${api.prefix}/products")
@@ -48,8 +48,8 @@ public class ProductController {
         try {
             Product theProduct = productService.addProduct(product);
             return ResponseEntity.ok(new ApiResponse("Add product success!", theProduct));
-        } catch (Exception e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        } catch (AlreadyExistsException e) {
+            return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
