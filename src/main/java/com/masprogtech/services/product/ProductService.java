@@ -5,6 +5,7 @@ import com.masprogtech.dtos.ProductDto;
 import com.masprogtech.entities.Category;
 import com.masprogtech.entities.Image;
 import com.masprogtech.entities.Product;
+import com.masprogtech.exception.AlreadyExistsException;
 import com.masprogtech.exception.ProductNotFoundException;
 import com.masprogtech.repositories.CategoryRepository;
 import com.masprogtech.repositories.ImageRepository;
@@ -41,6 +42,10 @@ public class ProductService implements IProductService {
         // if No, the save is as new category
         // the set as the new product category.
 
+        if(productExists(request.getName(), request.getBrand())){
+            throw new AlreadyExistsException(request.getBrand()+" "+request.getName()+" already exists, you may update this product instead!");
+        }
+
         Category category = Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
@@ -48,6 +53,10 @@ public class ProductService implements IProductService {
                 });
         request.setCategory(category);
         return productRepository.save(createProduct(request, category));
+    }
+
+    private boolean productExists(String name, String brand){
+        return productRepository.existsByNameAndBrand(name, brand);
     }
 
     private Product createProduct(AddProductRequest request, Category category){
