@@ -5,6 +5,8 @@ import com.masprogtech.entities.User;
 import com.masprogtech.request.CreateUserRequest;
 import com.masprogtech.request.UserUpdateRequest;
 
+import java.util.Optional;
+
 public interface IUserService {
     User getUserById(Long userId);
     User createUser(CreateUserRequest request);
@@ -12,4 +14,5 @@ public interface IUserService {
     void deleteUser(Long userId);
 
     UserDto convertUserToDto(User user);
+    User getAuthenticatedUser();
 }
