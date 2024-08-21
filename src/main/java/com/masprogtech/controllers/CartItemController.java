@@ -7,10 +7,12 @@ import com.masprogtech.response.ApiResponse;
 import com.masprogtech.services.cart.ICartItemService;
 import com.masprogtech.services.cart.ICartService;
 import com.masprogtech.services.user.IUserService;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @RestController
 @RequestMapping("${api.prefix}/cartItems")
@@ -32,12 +34,14 @@ public class CartItemController {
             @RequestParam Long productId,
             @RequestParam Integer quantity) {
         try {
-            User user = userService.getUserById(4L);
+            User user = userService.getAuthenticatedUser();
             Cart cart = cartService.initializeNewCart(user);
             cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add Item Success", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }catch (JwtException e){
+            return ResponseEntity.status(UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
